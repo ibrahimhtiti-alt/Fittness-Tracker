@@ -5,112 +5,307 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#121212">
     <title>Well You Pro</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23cc0000%22/><text x=%2250%22 y=%2250%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2270%22>💪</text></svg>">
 
     <style>
-        :root { --bg-color: #121212; --card-color: #1e1e1e; --primary-color: #cc0000; --text-color: #ffffff; --text-muted: #888; --gold: #ffd700; --green: #00e676; }
-        body { font-family: -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding-bottom: 120px; -webkit-tap-highlight-color: transparent; padding-top: env(safe-area-inset-top); }
-        
-        header { background: rgba(18,18,18,0.95); backdrop-filter: blur(10px); padding: 0 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; height: 60px; }
-        #back-btn { background: none; border: none; color: white; font-size: 1.5rem; width: 40px; cursor: pointer; display: none; }
-        #settings-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
-        h1 { margin: 0; font-size: 1rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; flex-grow: 1; text-align: center; }
+        :root { 
+            --bg-color: #0f0f0f; 
+            --card-bg: #1a1a1a;
+            --card-gradient: linear-gradient(145deg, #222222, #181818);
+            --primary-color: #d50000; 
+            --text-color: #f5f5f5; 
+            --text-muted: #888; 
+            --gold: #ffd700; 
+            --green: #00e676; 
+            --input-bg: #2a2a2a;
+            --font-main: 'Inter', sans-serif;
+            --font-head: 'Oswald', sans-serif;
+        }
 
-        /* Views */
-        .view-section { display: none; padding: 15px; max-width: 600px; margin: 0 auto; }
-        #start-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; }
+        * { box-sizing: border-box; }
+
+        body { 
+            font-family: var(--font-main); 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            margin: 0; 
+            padding-bottom: 120px; 
+            -webkit-tap-highlight-color: transparent; 
+            padding-top: env(safe-area-inset-top);
+        }
         
+        /* Glass Header */
+        header { 
+            background: rgba(15, 15, 15, 0.85); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            padding: 0 15px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            height: 60px; 
+        }
+        #header-title { 
+            margin: 0; 
+            font-family: var(--font-head);
+            font-size: 1.2rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            flex-grow: 1; 
+            text-align: center; 
+        }
+        button.icon-btn { background: none; border: none; color: white; font-size: 1.4rem; width: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        /* Progress Bar */
+        #progress-container {
+            position: fixed;
+            top: 60px; /* unter header */
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: transparent;
+            z-index: 999;
+            display: none; /* Nur in Workout View */
+        }
+        #progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.4s ease-out;
+            box-shadow: 0 0 10px rgba(213, 0, 0, 0.5);
+        }
+
+        /* Views & Animation */
+        .view-section { 
+            display: none; 
+            padding: 20px 15px; 
+            max-width: 600px; 
+            margin: 0 auto; 
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Start Screen */
+        #start-screen { min-height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        
+        /* Modern Cards */
+        .big-btn { 
+            width: 100%; 
+            max-width: 400px; 
+            background: var(--card-gradient); 
+            border: 1px solid #333; 
+            border-left: 4px solid var(--primary-color); 
+            color: white; 
+            padding: 25px 20px; 
+            margin-bottom: 16px; 
+            border-radius: 16px; 
+            cursor: pointer; 
+            display: flex; 
+            flex-direction: column; 
+            text-align: left; 
+            transition: transform 0.1s, box-shadow 0.2s; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .big-btn:active { transform: scale(0.97); }
+        .big-btn h3 { margin: 0; font-family: var(--font-head); font-size: 1.6rem; letter-spacing: 1px; }
+        .big-btn span { font-size: 0.85rem; color: var(--text-muted); margin-top: 6px; font-weight: 400; }
+        
+        .secondary-btn { 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            color: #ddd; 
+            padding: 16px; 
+            width: 100%; 
+            max-width: 400px; 
+            border-radius: 12px; 
+            margin-top: 25px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            font-family: var(--font-main);
+        }
+
+        /* Exercise Cards */
+        .exercise-card { 
+            background: var(--card-gradient); 
+            border-radius: 18px; 
+            padding: 20px; 
+            margin-bottom: 24px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2); 
+            border: 1px solid rgba(255,255,255,0.03); 
+            transition: border-color 0.3s;
+        }
+        .exercise-card.completed { border-color: var(--green); box-shadow: 0 0 15px rgba(0, 230, 118, 0.1); }
+        
+        .ex-header { margin-bottom: 18px; }
+        .ex-name { font-family: var(--font-head); font-size: 1.3rem; color: #fff; letter-spacing: 0.5px; }
+        .ex-device { font-size: 0.75rem; color: var(--primary-color); text-transform: uppercase; font-weight: 700; display: block; margin-top: 2px; letter-spacing: 1px; }
+        
+        .note-input { 
+            width: 100%; 
+            background: rgba(0,0,0,0.2); 
+            border: none; 
+            border-bottom: 1px solid #333;
+            color: #ccc; 
+            font-size: 0.85rem; 
+            padding: 8px 0; 
+            margin-top: 10px;
+            font-family: var(--font-main);
+            transition: border 0.3s;
+        }
+        .note-input:focus { outline: none; border-bottom-color: var(--primary-color); }
+
+        /* Set Row & Inputs */
+        .set-row { display: grid; grid-template-columns: 24px 1fr 1fr 1fr; gap: 12px; align-items: center; margin-bottom: 14px; }
+        .set-num { font-size: 0.8rem; color: #555; font-weight: bold; text-align: center; font-family: var(--font-head); }
+        
+        .hist-btn { 
+            background: rgba(255,255,255,0.05); 
+            border-radius: 10px; 
+            padding: 8px 4px; 
+            text-align: center; 
+            cursor: pointer; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+        }
+        .hist-label { font-size: 0.6rem; color: #666; text-transform: uppercase; margin-bottom: 2px; }
+        .hist-val { color: #ccc; font-weight: 600; font-size: 0.8rem; }
+
+        input[type="number"] { 
+            width: 100%; 
+            background: var(--input-bg); 
+            border: 2px solid transparent; 
+            color: white; 
+            padding: 14px 0; 
+            border-radius: 12px; 
+            text-align: center; 
+            font-size: 1.1rem; 
+            font-weight: 700; 
+            outline: none; 
+            font-family: var(--font-main);
+            transition: all 0.2s;
+        }
+        input[type="number"]:focus { background: #333; border-color: var(--primary-color); transform: translateY(-1px); }
+        .pr-glow { 
+            border-color: var(--gold) !important; 
+            color: var(--gold) !important; 
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.15); 
+            background: rgba(255, 215, 0, 0.05) !important;
+        }
+
         /* Buttons */
-        .big-btn { width: 100%; max-width: 400px; background: linear-gradient(145deg, #252525, #1e1e1e); border: 1px solid #333; border-left: 4px solid var(--primary-color); color: white; padding: 25px 20px; margin-bottom: 15px; border-radius: 12px; font-size: 1.4rem; font-weight: 800; cursor: pointer; display: flex; flex-direction: column; text-align: left; transition: transform 0.1s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        .big-btn:active { transform: scale(0.98); }
-        .big-btn span { font-size: 0.8rem; font-weight: normal; color: var(--text-muted); margin-top: 5px; }
+        .save-btn { 
+            background: linear-gradient(135deg, #d50000, #b71c1c); 
+            color: white; 
+            border: none; 
+            width: 100%; 
+            padding: 20px; 
+            font-size: 1.1rem; 
+            font-weight: 800; 
+            border-radius: 14px; 
+            cursor: pointer; 
+            box-shadow: 0 8px 20px rgba(213, 0, 0, 0.3); 
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: var(--font-head);
+            margin-top: 20px;
+        }
+        .reset-btn { background: transparent; border: none; color: #666; padding: 15px; width: 100%; margin-top: 10px; cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
+
+        /* Calendar Logs */
+        .log-entry { background: var(--card-gradient); margin-bottom: 15px; border-radius: 12px; overflow: hidden; border: 1px solid #333; }
+        .log-header { padding: 18px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .log-date { font-weight: 700; font-size: 1rem; color: #fff; }
+        .log-type { color: var(--primary-color); font-weight: 800; text-transform: uppercase; font-family: var(--font-head); letter-spacing: 1px; }
+        .log-content { display: none; padding: 0 18px 18px 18px; background: rgba(0,0,0,0.2); border-top: 1px solid #222; }
+        .log-ex-row { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .log-ex-row:last-child { border: none; }
+        .log-ex-name { font-weight: 600; color: #ddd; font-size: 0.9rem; }
+        .log-set-info { font-size: 0.8rem; color: #888; margin-top: 2px; }
+
+        /* Timer Bar */
+        #timer-bar { 
+            position: fixed; bottom: 0; left: 0; right: 0; 
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #333; 
+            padding: 12px 20px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            z-index: 2000; 
+            padding-bottom: max(15px, env(safe-area-inset-bottom)); 
+        }
+        .timer-display { font-family: monospace; font-size: 1.6rem; font-weight: 700; color: white; letter-spacing: -1px; }
+        .timer-active { color: var(--green); text-shadow: 0 0 10px rgba(0,230,118,0.4); }
+        .timer-controls button { background: #333; border: none; color: white; padding: 10px 16px; border-radius: 8px; font-weight: 600; margin-left: 8px; font-size: 0.9rem; }
+
+        /* Modal & Toast */
+        #modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(5px); z-index: 3000; display: none; align-items: center; justify-content: center; }
+        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 20px; width: 85%; max-width: 350px; text-align: center; border: 1px solid #333; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .modal-btn { display: block; width: 100%; padding: 16px; margin-top: 12px; border-radius: 10px; border: 1px solid #333; background: #222; color: white; cursor: pointer; font-size: 1rem; font-weight: 600; }
         
-        .secondary-btn { background: #333; border: 1px solid #444; color: white; padding: 15px; width: 100%; max-width: 400px; border-radius: 12px; margin-top: 20px; font-weight: bold; cursor: pointer; }
-
-        /* Workout Cards */
-        .exercise-card { background-color: var(--card-color); border-radius: 16px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); border: 1px solid #2a2a2a; }
-        .ex-header { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #333; }
-        .ex-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .ex-name { font-weight: 800; font-size: 1.1rem; color: #fff; }
-        .ex-device { font-size: 0.75rem; color: var(--primary-color); text-transform: uppercase; font-weight: bold; display: block; }
-        .note-input { width: 100%; background: #252525; border: none; color: #aaa; font-size: 0.85rem; padding: 8px; border-radius: 6px; box-sizing: border-box; font-family: monospace; }
-        
-        .set-row { display: grid; grid-template-columns: 25px 1fr 1fr 1fr; gap: 8px; align-items: center; margin-bottom: 12px; }
-        .set-num { font-size: 0.8rem; color: #555; font-weight: bold; text-align: center; }
-        
-        .hist-btn { background: #2a2a2a; border: 1px solid #333; border-radius: 6px; padding: 5px; font-size: 0.75rem; color: var(--text-muted); text-align: center; cursor: pointer; height: 100%; display: flex; flex-direction: column; justify-content: center; }
-        .hist-val { color: var(--text-color); font-weight: bold; font-size: 0.85rem; }
-        
-        input[type="number"] { width: 100%; background: #121212; border: 1px solid #333; color: white; padding: 12px 0; border-radius: 8px; text-align: center; font-size: 1.1rem; font-weight: bold; outline: none; -moz-appearance: textfield; }
-        input[type="number"]:focus { border-color: var(--primary-color); background: #1a1a1a; }
-        .pr-glow { border-color: var(--gold) !important; color: var(--gold) !important; box-shadow: 0 0 8px rgba(255, 215, 0, 0.2); }
-
-        .action-area { margin-top: 30px; margin-bottom: 80px; }
-        .save-btn { background: linear-gradient(to right, #cc0000, #990000); color: white; border: none; width: 100%; padding: 18px; font-size: 1.1rem; font-weight: bold; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 15px rgba(204, 0, 0, 0.3); transition: all 0.3s; }
-        .reset-btn { background: transparent; border: 1px solid #444; color: #666; padding: 15px; width: 100%; margin-top: 15px; border-radius: 12px; cursor: pointer; }
-
-        /* Calendar / Log Styles */
-        .log-entry { background: var(--card-color); margin-bottom: 15px; border-radius: 12px; border: 1px solid #333; overflow: hidden; }
-        .log-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: #252525; cursor: pointer; }
-        .log-date { font-weight: bold; font-size: 1rem; color: #fff; }
-        .log-type { color: var(--primary-color); font-weight: bold; text-transform: uppercase; font-size: 0.9rem; }
-        .log-content { display: none; padding: 15px; background: #1e1e1e; }
-        .log-content.open { display: block; }
-        .log-ex-row { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #333; }
-        .log-ex-name { font-weight: bold; color: #ccc; font-size: 0.9rem; margin-bottom: 4px; }
-        .log-set-info { font-size: 0.85rem; color: #888; font-family: monospace; }
-        .no-logs { text-align: center; color: #666; margin-top: 50px; font-style: italic; }
-
-        /* Misc */
-        #timer-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #222; border-top: 2px solid var(--primary-color); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 2000; padding-bottom: max(10px, env(safe-area-inset-bottom)); box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
-        .timer-display { font-family: monospace; font-size: 1.5rem; font-weight: bold; color: white; }
-        .timer-controls button { background: #333; border: none; color: white; padding: 8px 15px; border-radius: 6px; font-weight: bold; margin-left: 10px; font-size: 0.9rem; }
-        .timer-active { color: var(--green); }
-
-        #modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; }
-        .modal-content { background: var(--card-color); padding: 25px; border-radius: 15px; width: 85%; max-width: 350px; text-align: center; border: 1px solid #444; }
-        .modal-btn { display: block; width: 100%; padding: 15px; margin-top: 10px; border-radius: 8px; border: 1px solid #444; background: #252525; color: white; cursor: pointer; font-size: 1rem; }
-        .close-modal { margin-top: 20px; color: #888; background: none; border: none; font-size: 0.9rem; cursor: pointer; text-decoration: underline; }
-
-        #toast { visibility: hidden; min-width: 200px; background-color: #333; color: #fff; text-align: center; border-radius: 50px; padding: 12px; position: fixed; left: 50%; bottom: 80px; transform: translateX(-50%); border: 1px solid var(--green); z-index: 2500; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.5); font-size: 0.9rem; }
+        #toast { visibility: hidden; min-width: 220px; background-color: #222; color: #fff; text-align: center; border-radius: 50px; padding: 14px 20px; position: fixed; left: 50%; bottom: 90px; transform: translateX(-50%); border: 1px solid var(--green); z-index: 2500; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.5s; }
-        @keyframes fadein { from {bottom: 40px; opacity: 0;} to {bottom: 80px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 40px; opacity: 0;} }
+        @keyframes fadein { from {bottom: 50px; opacity: 0;} to {bottom: 90px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 90px; opacity: 1;} to {bottom: 50px; opacity: 0;} }
     </style>
 </head>
 <body>
 
 <header>
-    <button id="back-btn" onclick="goHome()">&#8592;</button>
+    <button class="icon-btn" id="back-btn" onclick="goHome()" style="display:none;">&#8592;</button>
     <h1 id="header-title">WELL YOU MOERS</h1>
-    <button id="settings-btn" onclick="toggleModal()">⚙️</button>
+    <button class="icon-btn" id="settings-btn" onclick="toggleModal()">⚙️</button>
 </header>
 
+<div id="progress-container"><div id="progress-fill"></div></div>
+
+<!-- START SCREEN -->
 <div id="start-screen" class="view-section" style="display:flex;">
-    <div style="text-align:center; margin-bottom:30px;">
-        <div style="font-size:3rem; margin-bottom:10px;">🏋️</div>
-        <h2 style="margin:0; color:white;">Trainingsplan</h2>
-        <p style="margin:5px 0 0 0; color:#666;">Well You App</p>
+    <div style="text-align:center; margin-bottom:40px;">
+        <h2 style="font-family:'Oswald'; font-size:2.5rem; margin:0; letter-spacing:2px; color:white;">LEVEL UP</h2>
+        <p style="margin:5px 0 0 0; color:#666; font-size:0.9rem; text-transform:uppercase; letter-spacing:1px;">Dein Training. Deine Regeln.</p>
     </div>
-    <button class="big-btn" onclick="tryStart('push')">PUSH<span>Brust, Schulter, Trizeps</span></button>
-    <button class="big-btn" onclick="tryStart('pull')">PULL<span>Rücken, Bizeps, Rear Delts</span></button>
-    <button class="big-btn" onclick="tryStart('legs')">LEGS<span>Beine, Waden, Bauch</span></button>
     
-    <button class="secondary-btn" onclick="showCalendar()">📅 Verlauf / Logbuch</button>
+    <button class="big-btn" onclick="tryStart('push')">
+        <h3>PUSH</h3><span>Brust, Schulter, Trizeps</span>
+    </button>
+    <button class="big-btn" onclick="tryStart('pull')">
+        <h3>PULL</h3><span>Rücken, Bizeps, Rear Delts</span>
+    </button>
+    <button class="big-btn" onclick="tryStart('legs')">
+        <h3>LEGS</h3><span>Beine, Waden, Bauch</span>
+    </button>
+    
+    <button class="secondary-btn" onclick="showCalendar()">📅 Verlauf & Logbuch</button>
 </div>
 
+<!-- WORKOUT VIEW -->
 <div id="workout-view" class="view-section">
     <div id="workout-container"></div>
 </div>
 
+<!-- CALENDAR VIEW -->
 <div id="calendar-view" class="view-section">
-    <h2 style="text-align:center; margin-bottom:20px;">Trainings-Verlauf</h2>
+    <h2 style="text-align:center; font-family:'Oswald'; margin-bottom:25px; font-size:1.5rem;">LOGBUCH</h2>
     <div id="calendar-list"></div>
 </div>
 
+<!-- TIMER -->
 <div id="timer-bar">
     <div class="timer-display" id="timer-val">00:00</div>
     <div class="timer-controls">
@@ -120,19 +315,21 @@
     </div>
 </div>
 
+<!-- MODAL -->
 <div id="modal-overlay">
     <div class="modal-content">
-        <h3>Einstellungen</h3>
-        <button class="modal-btn" onclick="downloadBackup()">💾 Daten Sichern (Export)</button>
-        <button class="modal-btn" onclick="document.getElementById('import-file').click()">📂 Daten Laden (Import)</button>
+        <h3 style="font-family:'Oswald'; margin-top:0;">EINSTELLUNGEN</h3>
+        <button class="modal-btn" onclick="downloadBackup()">💾 Daten Sichern</button>
+        <button class="modal-btn" onclick="document.getElementById('import-file').click()">📂 Daten Laden</button>
         <input type="file" id="import-file" style="display:none" onchange="importBackup(this)">
-        <button class="close-modal" onclick="toggleModal()">Schließen</button>
+        <button class="modal-btn" style="background:transparent; border:none; color:#888; margin-top:20px;" onclick="toggleModal()">Schließen</button>
     </div>
 </div>
 
 <div id="toast">✅ Gespeichert!</div>
 
 <script>
+    // --- DATEN ---
     const workoutPlan = {
         push: [
             { id: "p1", name: "Schrägbankdrücken", device: "HS Iso-Lateral Incline", sets: 4 },
@@ -160,27 +357,30 @@
         ]
     };
 
+    // --- NAVIGATION ---
     function tryStart(type) {
         try { localStorage.setItem('test', '1'); localStorage.removeItem('test'); startWorkout(type); } 
-        catch (e) { alert("Privater Modus aktiv? Daten können nicht gespeichert werden."); startWorkout(type); }
+        catch (e) { alert("Privater Modus aktiv?"); startWorkout(type); }
     }
 
     function switchView(viewId) {
         document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
         document.getElementById(viewId).style.display = 'block';
         if(viewId === 'start-screen') {
-            document.getElementById('start-screen').style.display = 'flex'; // Fix für Flexbox Layout
+            document.getElementById('start-screen').style.display = 'flex';
             document.getElementById('back-btn').style.display = 'none';
             document.getElementById('header-title').innerText = "WELL YOU MOERS";
+            document.getElementById('progress-container').style.display = 'none';
         } else {
-            document.getElementById('back-btn').style.display = 'block';
+            document.getElementById('back-btn').style.display = 'flex';
         }
         window.scrollTo(0,0);
     }
 
     function startWorkout(type) {
         switchView('workout-view');
-        document.getElementById('header-title').innerText = type.toUpperCase();
+        document.getElementById('header-title').innerText = type.toUpperCase() + " SESSION";
+        document.getElementById('progress-container').style.display = 'block';
         renderWorkout(type);
     }
 
@@ -194,6 +394,7 @@
         workoutPlan[type].forEach(ex => {
             const note = localStorage.getItem(`wy_note_${ex.id}`) || "";
             let setsHtml = '';
+            
             for(let i=1; i <= ex.sets; i++) {
                 let curr = {};
                 try { curr = JSON.parse(localStorage.getItem(`wy_curr_${ex.id}_s${i}`)) || {w:'', r:''}; } catch(e){}
@@ -208,40 +409,79 @@
                 <div class="set-row">
                     <div class="set-num">${i}</div>
                     <div class="hist-btn" onclick="copyHistory('${ex.id}', ${i}, '${histValW}', '${histValR}')">
-                        <div class="hist-label">LETZTES</div>
+                        <div class="hist-label">Last</div>
                         <div class="hist-val">${histText}</div>
                     </div>
                     <input type="number" inputmode="decimal" placeholder="kg" id="${ex.id}_s${i}_w" value="${curr.w}" 
                         oninput="checkPR('${ex.id}', ${i}, ${histValW || 0}, 'w')" 
-                        onchange="autoSave('${ex.id}', ${i}); startTimerIfNew(this.value)">
+                        onchange="inputChanged('${ex.id}', ${i})">
                     <input type="number" inputmode="decimal" placeholder="Wdh" id="${ex.id}_s${i}_r" value="${curr.r}" 
                         oninput="checkPR('${ex.id}', ${i}, ${histValR || 0}, 'r')" 
-                        onchange="autoSave('${ex.id}', ${i}); startTimerIfNew(this.value)">
+                        onchange="inputChanged('${ex.id}', ${i})">
                 </div>`;
             }
             container.innerHTML += `
-            <div class="exercise-card">
+            <div class="exercise-card" id="card_${ex.id}">
                 <div class="ex-header">
-                    <div class="ex-top-row"><span class="ex-name">${ex.name}</span><span class="ex-device">${ex.device}</span></div>
-                    <input type="text" class="note-input" placeholder="Notiz..." value="${note}" onchange="saveNote('${ex.id}', this.value)">
+                    <div class="ex-name">${ex.name}</div>
+                    <div class="ex-device">${ex.device}</div>
+                    <input type="text" class="note-input" placeholder="Notiz (Sitz, Griff)..." value="${note}" onchange="saveNote('${ex.id}', this.value)">
                 </div>
                 ${setsHtml}
             </div>`;
         });
         
         container.innerHTML += `
-            <div class="action-area">
-                <button id="finishBtn" class="save-btn" onclick="finishWorkout('${type}')">TRAINING BEENDEN & SPEICHERN</button>
-                <button class="reset-btn" onclick="clearInputs('${type}')">Reset (Eingaben löschen)</button>
+            <div style="margin-top:40px; margin-bottom:100px;">
+                <button id="finishBtn" class="save-btn" onclick="finishWorkout('${type}')">Training Abschliessen</button>
+                <button class="reset-btn" onclick="clearInputs('${type}')">Eingaben löschen</button>
             </div>`;
-        setTimeout(() => checkAllPRs(type), 100);
+        
+        setTimeout(() => { checkAllPRs(type); updateProgress(type); }, 100);
+    }
+
+    // --- HELPERS ---
+    function inputChanged(exId, set) {
+        autoSave(exId, set);
+        let r = document.getElementById(`${exId}_s${set}_r`).value;
+        startTimerIfNew(r);
+        
+        // Finde Trainingstyp heraus (etwas hacky aber effizient)
+        let type = 'push';
+        if(exId.startsWith('pl')) type = 'pull';
+        if(exId.startsWith('l')) type = 'legs';
+        updateProgress(type);
+    }
+
+    function updateProgress(type) {
+        let totalSets = 0;
+        let filledSets = 0;
+        
+        workoutPlan[type].forEach(ex => {
+            let exFilled = 0;
+            for(let i=1; i<=ex.sets; i++) {
+                totalSets++;
+                let w = document.getElementById(`${ex.id}_s${i}_w`).value;
+                let r = document.getElementById(`${ex.id}_s${i}_r`).value;
+                if(w && r) { filledSets++; exFilled++; }
+            }
+            // Karten-Status updaten
+            const card = document.getElementById(`card_${ex.id}`);
+            if(exFilled === ex.sets) card.classList.add('completed');
+            else card.classList.remove('completed');
+        });
+
+        let percent = (filledSets / totalSets) * 100;
+        document.getElementById('progress-fill').style.width = percent + "%";
     }
 
     function copyHistory(exId, set, w, r) {
         if(!w && !r) return;
         document.getElementById(`${exId}_s${set}_w`).value = w;
         document.getElementById(`${exId}_s${set}_r`).value = r;
-        autoSave(exId, set);
+        // Trigger change event manually
+        let type = exId.startsWith('p') ? (exId.startsWith('pl') ? 'pull' : 'push') : 'legs';
+        inputChanged(exId, set);
         showToast("Werte kopiert!");
         checkPR(exId, set, w, 'w'); checkPR(exId, set, r, 'r');
     }
@@ -269,8 +509,7 @@
         }});
     }
 
-    // --- KALENDER / LOGBOOK LOGIK ---
-    
+    // --- CALENDAR ---
     function showCalendar() {
         switchView('calendar-view');
         document.getElementById('header-title').innerText = "VERLAUF";
@@ -280,25 +519,23 @@
     function renderCalendar() {
         const container = document.getElementById('calendar-list');
         container.innerHTML = '';
-        
         let logs = [];
         try { logs = JSON.parse(localStorage.getItem('wy_workout_logs')) || []; } catch(e) {}
         
         if(logs.length === 0) {
-            container.innerHTML = '<div class="no-logs">Noch keine Trainings gespeichert.<br>Geh trainieren! 💪</div>';
+            container.innerHTML = '<div style="text-align:center; color:#666; padding:40px;">Noch keine Einträge.<br>Zeit für Gains! 💪</div>';
             return;
         }
 
-        // Sortieren: Neueste zuerst
         logs.sort((a, b) => new Date(b.date) - new Date(a.date));
 
         logs.forEach((log, index) => {
             const dateObj = new Date(log.date);
-            const dateStr = dateObj.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit' });
+            const dateStr = dateObj.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit' }) + ' ' + dateObj.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
             
             let detailsHtml = '';
             log.exercises.forEach(ex => {
-                let setInfo = ex.sets.map(s => `S${s.s}: <b>${s.w}kg</b>×${s.r}`).join(' | ');
+                let setInfo = ex.sets.map(s => `<b>${s.w}</b>×${s.r}`).join('<span style="color:#444; margin:0 4px">|</span>');
                 detailsHtml += `<div class="log-ex-row"><div class="log-ex-name">${ex.name}</div><div class="log-set-info">${setInfo}</div></div>`;
             });
 
@@ -321,51 +558,39 @@
         if(el.style.display === "block") el.style.display = "none"; else el.style.display = "block";
     }
 
-    // --- FINISH & SAVE (Jetzt mit LOGBUCH) ---
+    // --- FINISH ---
     function finishWorkout(type) {
         let btn = document.getElementById("finishBtn");
         if(btn) btn.innerText = "SPEICHERE...";
 
         setTimeout(() => {
             try {
-                // 1. Daten für Logbuch sammeln
-                let sessionLog = {
-                    date: new Date().toISOString(),
-                    type: type.toUpperCase(),
-                    exercises: []
-                };
+                let sessionLog = { date: new Date().toISOString(), type: type.toUpperCase(), exercises: [] };
 
-                // 2. Loop durch Übungen: Speichern von History UND Sammeln für Log
                 workoutPlan[type].forEach(ex => {
                     let exData = { name: ex.name, sets: [] };
                     let hasData = false;
-
                     for(let i=1; i <= ex.sets; i++) {
                         let w = document.getElementById(`${ex.id}_s${i}_w`).value;
                         let r = document.getElementById(`${ex.id}_s${i}_r`).value;
-                        
                         if(w && r) {
-                            // History für "Letztes Mal" updaten
                             localStorage.setItem(`wy_hist_${ex.id}_s${i}`, JSON.stringify({w:w, r:r}));
-                            // Daten für Logbuch
                             exData.sets.push({ s: i, w: w, r: r });
                             hasData = true;
                         }
-                        // Temp Daten löschen
                         localStorage.removeItem(`wy_curr_${ex.id}_s${i}`);
                     }
                     if(hasData) sessionLog.exercises.push(exData);
                 });
 
-                // 3. Logbuch Eintrag speichern (wenn trainiert wurde)
                 if(sessionLog.exercises.length > 0) {
                     let logs = JSON.parse(localStorage.getItem('wy_workout_logs')) || [];
                     logs.push(sessionLog);
                     localStorage.setItem('wy_workout_logs', JSON.stringify(logs));
                 }
 
-                showToast("Training gespeichert & archiviert!");
-                setTimeout(goHome, 1500);
+                showToast("Training gespeichert!");
+                setTimeout(goHome, 1000);
 
             } catch(e) {
                 alert("Fehler: " + e.message);
@@ -375,16 +600,17 @@
     }
 
     function clearInputs(type) {
-        if(!confirm("Eingaben zurücksetzen?")) return;
+        if(!confirm("Wirklich alles löschen?")) return;
         workoutPlan[type].forEach(ex => { for(let i=1; i <= ex.sets; i++) {
             document.getElementById(`${ex.id}_s${i}_w`).value = '';
             document.getElementById(`${ex.id}_s${i}_r`).value = '';
             localStorage.removeItem(`wy_curr_${ex.id}_s${i}`);
             checkPR(ex.id, i, 0, 'w'); checkPR(ex.id, i, 0, 'r');
         }});
+        updateProgress(type);
     }
 
-    // Timer Logic
+    // --- TIMER ---
     let timerInterval; let seconds = 0; let isRunning = false;
     function startTimerIfNew(val) { if(val && !isRunning) { seconds = 0; updateTimerDisplay(); toggleTimer(); } }
     function toggleTimer() {
@@ -395,7 +621,7 @@
     function resetTimer() { clearInterval(timerInterval); seconds = 0; isRunning = false; updateTimerDisplay(); document.getElementById('timer-btn').innerText = "Start"; document.getElementById('timer-val').classList.remove('timer-active'); }
     function updateTimerDisplay() { let m = Math.floor(seconds / 60).toString().padStart(2, '0'); let s = (seconds % 60).toString().padStart(2, '0'); document.getElementById('timer-val').innerText = `${m}:${s}`; }
 
-    // Misc
+    // --- MISC ---
     function toggleModal() { const m = document.getElementById('modal-overlay'); m.style.display = (m.style.display === 'flex') ? 'none' : 'flex'; }
     function downloadBackup() { const data = JSON.stringify(localStorage); const blob = new Blob([data], {type: "application/json"}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = "well_you_backup.json"; document.body.appendChild(a); a.click(); document.body.removeChild(a); toggleModal(); }
     function importBackup(input) { const file = input.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const data = JSON.parse(e.target.result); Object.keys(data).forEach(k => { localStorage.setItem(k, data[k]); }); alert("Backup geladen!"); location.reload(); } catch(err) { alert("Fehler beim Laden."); } }; reader.readAsText(file); }
