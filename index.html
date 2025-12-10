@@ -6,59 +6,131 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
-    <title>Well You Tracker</title>
-    <!-- Icon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏋️</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%231e1e1e%22/><text x=%2250%22 y=%2250%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2270%22>🏋️</text></svg>">
+    <title>Well You Pro</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23cc0000%22/><text x=%2250%22 y=%2250%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2270%22>💪</text></svg>">
 
     <style>
-        :root { --bg-color: #121212; --card-color: #1e1e1e; --primary-color: #cc0000; --text-color: #ffffff; --text-secondary: #a0a0a0; --accent-green: #00e676; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding-bottom: 100px; -webkit-tap-highlight-color: transparent; padding-top: env(safe-area-inset-top); }
-        header { background-color: rgba(0,0,0,0.9); backdrop-filter: blur(10px); padding: 15px; display: flex; align-items: center; justify-content: center; border-bottom: 2px solid var(--primary-color); position: sticky; top: 0; z-index: 1000; height: 50px; }
-        #back-btn { position: absolute; left: 15px; background: #333; border: none; color: white; font-size: 1.4rem; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: none; align-items: center; justify-content: center; font-weight: bold; }
-        h1 { margin: 0; font-size: 1.1rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
-        #start-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; padding: 20px; }
-        .welcome-text { text-align: center; margin-bottom: 30px; }
-        .welcome-text h2 { margin-bottom: 5px; color: var(--primary-color); }
-        .big-btn { width: 100%; max-width: 350px; background: linear-gradient(145deg, #252525, #1e1e1e); border: 1px solid #333; border-left: 5px solid var(--primary-color); color: white; padding: 25px 20px; margin-bottom: 15px; border-radius: 12px; font-size: 1.5rem; font-weight: 800; cursor: pointer; display: flex; flex-direction: column; text-align: left; transition: transform 0.1s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        :root { --bg-color: #121212; --card-color: #1e1e1e; --primary-color: #cc0000; --text-color: #ffffff; --text-muted: #888; --gold: #ffd700; --green: #00e676; }
+        body { font-family: -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding-bottom: 120px; -webkit-tap-highlight-color: transparent; padding-top: env(safe-area-inset-top); }
+        
+        header { background: rgba(18,18,18,0.95); backdrop-filter: blur(10px); padding: 0 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; height: 60px; }
+        #back-btn { background: none; border: none; color: white; font-size: 1.5rem; width: 40px; cursor: pointer; display: none; }
+        #settings-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+        h1 { margin: 0; font-size: 1rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; flex-grow: 1; text-align: center; }
+
+        /* Views */
+        .view-section { display: none; padding: 15px; max-width: 600px; margin: 0 auto; }
+        #start-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; }
+        
+        /* Buttons */
+        .big-btn { width: 100%; max-width: 400px; background: linear-gradient(145deg, #252525, #1e1e1e); border: 1px solid #333; border-left: 4px solid var(--primary-color); color: white; padding: 25px 20px; margin-bottom: 15px; border-radius: 12px; font-size: 1.4rem; font-weight: 800; cursor: pointer; display: flex; flex-direction: column; text-align: left; transition: transform 0.1s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
         .big-btn:active { transform: scale(0.98); }
-        .big-btn span { font-size: 0.85rem; font-weight: normal; color: var(--text-secondary); margin-top: 5px; text-transform: none; }
-        #workout-view { display: none; padding: 15px; max-width: 600px; margin: 0 auto; }
-        .exercise-card { background-color: var(--card-color); border-radius: 16px; padding: 18px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .ex-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .ex-info { display: flex; flex-direction: column; }
-        .ex-name { color: var(--text-color); font-weight: 800; font-size: 1.1rem; margin-bottom: 4px; } 
-        .ex-device { font-size: 0.8rem; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
-        .set-row { display: grid; grid-template-columns: 30px 1fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 15px; font-size: 0.9rem; }
-        .set-label { font-weight: bold; color: #555; text-align: center; background: #252525; border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
-        .history-info { display: flex; flex-direction: column; justify-content: center; font-size: 0.75rem; color: #777; }
-        .history-val { color: var(--accent-green); font-weight: bold; font-size: 0.9rem; }
-        input { width: 100%; background-color: #121212; border: 1px solid #333; color: white; padding: 12px 5px; border-radius: 8px; text-align: center; font-size: 18px; font-weight: bold; outline: none; }
-        input:focus { border-color: var(--primary-color); background-color: #1a1a1a; }
-        .save-btn { background: linear-gradient(to right, #cc0000, #990000); color: white; border: none; width: 100%; padding: 20px; font-size: 1.2rem; font-weight: bold; border-radius: 12px; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 15px rgba(204, 0, 0, 0.4); }
-        .reset-btn { background: transparent; border: 1px solid #444; color: #888; padding: 15px; width: 100%; margin-top: 20px; border-radius: 12px; cursor: pointer; }
-        #toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 50px; padding: 16px; position: fixed; left: 50%; bottom: 40px; transform: translateX(-50%); border: 1px solid var(--primary-color); z-index: 2000; box-shadow: 0 5px 15px rgba(0,0,0,0.5); font-weight: bold; }
+        .big-btn span { font-size: 0.8rem; font-weight: normal; color: var(--text-muted); margin-top: 5px; }
+        
+        .secondary-btn { background: #333; border: 1px solid #444; color: white; padding: 15px; width: 100%; max-width: 400px; border-radius: 12px; margin-top: 20px; font-weight: bold; cursor: pointer; }
+
+        /* Workout Cards */
+        .exercise-card { background-color: var(--card-color); border-radius: 16px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); border: 1px solid #2a2a2a; }
+        .ex-header { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #333; }
+        .ex-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .ex-name { font-weight: 800; font-size: 1.1rem; color: #fff; }
+        .ex-device { font-size: 0.75rem; color: var(--primary-color); text-transform: uppercase; font-weight: bold; display: block; }
+        .note-input { width: 100%; background: #252525; border: none; color: #aaa; font-size: 0.85rem; padding: 8px; border-radius: 6px; box-sizing: border-box; font-family: monospace; }
+        
+        .set-row { display: grid; grid-template-columns: 25px 1fr 1fr 1fr; gap: 8px; align-items: center; margin-bottom: 12px; }
+        .set-num { font-size: 0.8rem; color: #555; font-weight: bold; text-align: center; }
+        
+        .hist-btn { background: #2a2a2a; border: 1px solid #333; border-radius: 6px; padding: 5px; font-size: 0.75rem; color: var(--text-muted); text-align: center; cursor: pointer; height: 100%; display: flex; flex-direction: column; justify-content: center; }
+        .hist-val { color: var(--text-color); font-weight: bold; font-size: 0.85rem; }
+        
+        input[type="number"] { width: 100%; background: #121212; border: 1px solid #333; color: white; padding: 12px 0; border-radius: 8px; text-align: center; font-size: 1.1rem; font-weight: bold; outline: none; -moz-appearance: textfield; }
+        input[type="number"]:focus { border-color: var(--primary-color); background: #1a1a1a; }
+        .pr-glow { border-color: var(--gold) !important; color: var(--gold) !important; box-shadow: 0 0 8px rgba(255, 215, 0, 0.2); }
+
+        .action-area { margin-top: 30px; margin-bottom: 80px; }
+        .save-btn { background: linear-gradient(to right, #cc0000, #990000); color: white; border: none; width: 100%; padding: 18px; font-size: 1.1rem; font-weight: bold; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 15px rgba(204, 0, 0, 0.3); transition: all 0.3s; }
+        .reset-btn { background: transparent; border: 1px solid #444; color: #666; padding: 15px; width: 100%; margin-top: 15px; border-radius: 12px; cursor: pointer; }
+
+        /* Calendar / Log Styles */
+        .log-entry { background: var(--card-color); margin-bottom: 15px; border-radius: 12px; border: 1px solid #333; overflow: hidden; }
+        .log-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: #252525; cursor: pointer; }
+        .log-date { font-weight: bold; font-size: 1rem; color: #fff; }
+        .log-type { color: var(--primary-color); font-weight: bold; text-transform: uppercase; font-size: 0.9rem; }
+        .log-content { display: none; padding: 15px; background: #1e1e1e; }
+        .log-content.open { display: block; }
+        .log-ex-row { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #333; }
+        .log-ex-name { font-weight: bold; color: #ccc; font-size: 0.9rem; margin-bottom: 4px; }
+        .log-set-info { font-size: 0.85rem; color: #888; font-family: monospace; }
+        .no-logs { text-align: center; color: #666; margin-top: 50px; font-style: italic; }
+
+        /* Misc */
+        #timer-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #222; border-top: 2px solid var(--primary-color); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 2000; padding-bottom: max(10px, env(safe-area-inset-bottom)); box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
+        .timer-display { font-family: monospace; font-size: 1.5rem; font-weight: bold; color: white; }
+        .timer-controls button { background: #333; border: none; color: white; padding: 8px 15px; border-radius: 6px; font-weight: bold; margin-left: 10px; font-size: 0.9rem; }
+        .timer-active { color: var(--green); }
+
+        #modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; }
+        .modal-content { background: var(--card-color); padding: 25px; border-radius: 15px; width: 85%; max-width: 350px; text-align: center; border: 1px solid #444; }
+        .modal-btn { display: block; width: 100%; padding: 15px; margin-top: 10px; border-radius: 8px; border: 1px solid #444; background: #252525; color: white; cursor: pointer; font-size: 1rem; }
+        .close-modal { margin-top: 20px; color: #888; background: none; border: none; font-size: 0.9rem; cursor: pointer; text-decoration: underline; }
+
+        #toast { visibility: hidden; min-width: 200px; background-color: #333; color: #fff; text-align: center; border-radius: 50px; padding: 12px; position: fixed; left: 50%; bottom: 80px; transform: translateX(-50%); border: 1px solid var(--green); z-index: 2500; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.5); font-size: 0.9rem; }
         #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 40px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 40px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        @keyframes fadein { from {bottom: 40px; opacity: 0;} to {bottom: 80px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 40px; opacity: 0;} }
     </style>
 </head>
 <body>
 
 <header>
     <button id="back-btn" onclick="goHome()">&#8592;</button>
-    <h1 id="header-title">Well You Moers</h1>
+    <h1 id="header-title">WELL YOU MOERS</h1>
+    <button id="settings-btn" onclick="toggleModal()">⚙️</button>
 </header>
 
-<div id="start-screen">
-    <div class="welcome-text"><h2>Let's Grow!</h2><p>Was zerstören wir heute?</p></div>
-    <button class="big-btn" onclick="tryStart('push')">PUSH<span>Brust, Schulter, Trizeps<br><small>HS Incline, Iso Chest, Seitheben...</small></span></button>
-    <button class="big-btn" onclick="tryStart('pull')">PULL<span>Rücken, Bizeps<br><small>High Row, Low Row, Curls...</small></span></button>
-    <button class="big-btn" onclick="tryStart('legs')">LEGS<span>Beine, Bauch<br><small>Squat, HS Leg Press, Strecker...</small></span></button>
+<div id="start-screen" class="view-section" style="display:flex;">
+    <div style="text-align:center; margin-bottom:30px;">
+        <div style="font-size:3rem; margin-bottom:10px;">🏋️</div>
+        <h2 style="margin:0; color:white;">Trainingsplan</h2>
+        <p style="margin:5px 0 0 0; color:#666;">Well You App</p>
+    </div>
+    <button class="big-btn" onclick="tryStart('push')">PUSH<span>Brust, Schulter, Trizeps</span></button>
+    <button class="big-btn" onclick="tryStart('pull')">PULL<span>Rücken, Bizeps, Rear Delts</span></button>
+    <button class="big-btn" onclick="tryStart('legs')">LEGS<span>Beine, Waden, Bauch</span></button>
+    
+    <button class="secondary-btn" onclick="showCalendar()">📅 Verlauf / Logbuch</button>
 </div>
 
-<div id="workout-view"><div id="workout-container"></div></div>
-<div id="toast">✅ Fortschritt gespeichert!</div>
+<div id="workout-view" class="view-section">
+    <div id="workout-container"></div>
+</div>
+
+<div id="calendar-view" class="view-section">
+    <h2 style="text-align:center; margin-bottom:20px;">Trainings-Verlauf</h2>
+    <div id="calendar-list"></div>
+</div>
+
+<div id="timer-bar">
+    <div class="timer-display" id="timer-val">00:00</div>
+    <div class="timer-controls">
+        <button onclick="addTime(30)">+30s</button>
+        <button onclick="toggleTimer()" id="timer-btn">Start</button>
+        <button onclick="resetTimer()" style="color:#ff5555">✖</button>
+    </div>
+</div>
+
+<div id="modal-overlay">
+    <div class="modal-content">
+        <h3>Einstellungen</h3>
+        <button class="modal-btn" onclick="downloadBackup()">💾 Daten Sichern (Export)</button>
+        <button class="modal-btn" onclick="document.getElementById('import-file').click()">📂 Daten Laden (Import)</button>
+        <input type="file" id="import-file" style="display:none" onchange="importBackup(this)">
+        <button class="close-modal" onclick="toggleModal()">Schließen</button>
+    </div>
+</div>
+
+<div id="toast">✅ Gespeichert!</div>
 
 <script>
     const workoutPlan = {
@@ -90,117 +162,244 @@
 
     function tryStart(type) {
         try { localStorage.setItem('test', '1'); localStorage.removeItem('test'); startWorkout(type); } 
-        catch (e) { alert("Privater Modus aktiv? Speichern funktioniert evtl. nicht."); startWorkout(type); }
+        catch (e) { alert("Privater Modus aktiv? Daten können nicht gespeichert werden."); startWorkout(type); }
     }
 
-    function startWorkout(type) {
-        document.getElementById('start-screen').style.display = 'none';
-        document.getElementById('workout-view').style.display = 'block';
-        document.getElementById('back-btn').style.display = 'flex';
-        document.getElementById('header-title').innerText = type.toUpperCase() + " SESSION";
-        renderWorkout(type);
+    function switchView(viewId) {
+        document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
+        document.getElementById(viewId).style.display = 'block';
+        if(viewId === 'start-screen') {
+            document.getElementById('start-screen').style.display = 'flex'; // Fix für Flexbox Layout
+            document.getElementById('back-btn').style.display = 'none';
+            document.getElementById('header-title').innerText = "WELL YOU MOERS";
+        } else {
+            document.getElementById('back-btn').style.display = 'block';
+        }
         window.scrollTo(0,0);
     }
 
-    function goHome() {
-        document.getElementById('workout-view').style.display = 'none';
-        document.getElementById('start-screen').style.display = 'flex';
-        document.getElementById('back-btn').style.display = 'none';
-        document.getElementById('header-title').innerText = "Well You Moers";
+    function startWorkout(type) {
+        switchView('workout-view');
+        document.getElementById('header-title').innerText = type.toUpperCase();
+        renderWorkout(type);
     }
 
+    function goHome() { switchView('start-screen'); }
+
+    // --- WORKOUT LOGIC ---
     function renderWorkout(type) {
         const container = document.getElementById('workout-container');
         container.innerHTML = '';
 
         workoutPlan[type].forEach(ex => {
+            const note = localStorage.getItem(`wy_note_${ex.id}`) || "";
             let setsHtml = '';
             for(let i=1; i <= ex.sets; i++) {
-                let savedCurrent = {weight: '', reps: ''};
-                try { savedCurrent = JSON.parse(localStorage.getItem(`wy_moers_curr_${ex.id}_s${i}`)) || {weight:'', reps:''}; } catch(e){}
-                let historyData = null;
-                try { historyData = JSON.parse(localStorage.getItem(`wy_moers_hist_${ex.id}_s${i}`)); } catch(e){}
-                let histHtml = historyData ? `<span class="history-val">${historyData.weight}kg x ${historyData.reps}</span>` : `<span style="color:#444">-</span>`;
+                let curr = {};
+                try { curr = JSON.parse(localStorage.getItem(`wy_curr_${ex.id}_s${i}`)) || {w:'', r:''}; } catch(e){}
+                let hist = null;
+                try { hist = JSON.parse(localStorage.getItem(`wy_hist_${ex.id}_s${i}`)); } catch(e){}
+                
+                let histText = hist ? `${hist.w}kg × ${hist.r}` : "—";
+                let histValW = hist ? hist.w : "";
+                let histValR = hist ? hist.r : "";
 
                 setsHtml += `
                 <div class="set-row">
-                    <div class="set-label">${i}</div>
-                    <div class="history-info">Letztes:<br>${histHtml}</div>
-                    <input type="number" inputmode="decimal" placeholder="kg" id="${ex.id}_s${i}_w" value="${savedCurrent.weight}" onchange="autoSaveTemp('${ex.id}', ${i})">
-                    <input type="number" inputmode="decimal" placeholder="Wdh" id="${ex.id}_s${i}_r" value="${savedCurrent.reps}" onchange="autoSaveTemp('${ex.id}', ${i})">
+                    <div class="set-num">${i}</div>
+                    <div class="hist-btn" onclick="copyHistory('${ex.id}', ${i}, '${histValW}', '${histValR}')">
+                        <div class="hist-label">LETZTES</div>
+                        <div class="hist-val">${histText}</div>
+                    </div>
+                    <input type="number" inputmode="decimal" placeholder="kg" id="${ex.id}_s${i}_w" value="${curr.w}" 
+                        oninput="checkPR('${ex.id}', ${i}, ${histValW || 0}, 'w')" 
+                        onchange="autoSave('${ex.id}', ${i}); startTimerIfNew(this.value)">
+                    <input type="number" inputmode="decimal" placeholder="Wdh" id="${ex.id}_s${i}_r" value="${curr.r}" 
+                        oninput="checkPR('${ex.id}', ${i}, ${histValR || 0}, 'r')" 
+                        onchange="autoSave('${ex.id}', ${i}); startTimerIfNew(this.value)">
                 </div>`;
             }
-            container.innerHTML += `<div class="exercise-card"><div class="ex-header"><div class="ex-info"><span class="ex-name">${ex.name}</span><span class="ex-device">${ex.device}</span></div></div>${setsHtml}</div>`;
-        });
-
-        // WICHTIG: Die ID für den Button ist jetzt eindeutig
-        container.innerHTML += `
-            <div style="margin-top:30px; margin-bottom:50px;">
-                <button id="finishBtn" class="save-btn" onclick="finishWorkout('${type}')">WORKOUT BEENDEN & SPEICHERN</button>
-                <button class="reset-btn" onclick="clearInputs('${type}')">Reset (Nur Eingaben löschen)</button>
+            container.innerHTML += `
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div class="ex-top-row"><span class="ex-name">${ex.name}</span><span class="ex-device">${ex.device}</span></div>
+                    <input type="text" class="note-input" placeholder="Notiz..." value="${note}" onchange="saveNote('${ex.id}', this.value)">
+                </div>
+                ${setsHtml}
             </div>`;
+        });
+        
+        container.innerHTML += `
+            <div class="action-area">
+                <button id="finishBtn" class="save-btn" onclick="finishWorkout('${type}')">TRAINING BEENDEN & SPEICHERN</button>
+                <button class="reset-btn" onclick="clearInputs('${type}')">Reset (Eingaben löschen)</button>
+            </div>`;
+        setTimeout(() => checkAllPRs(type), 100);
     }
 
-    function autoSaveTemp(exId, setNum) {
-        try {
-            let w = document.getElementById(`${exId}_s${setNum}_w`).value;
-            let r = document.getElementById(`${exId}_s${setNum}_r`).value;
-            localStorage.setItem(`wy_moers_curr_${exId}_s${setNum}`, JSON.stringify({weight:w, reps:r}));
-        } catch(e) { console.log("Fehler beim AutoSave: " + e); }
+    function copyHistory(exId, set, w, r) {
+        if(!w && !r) return;
+        document.getElementById(`${exId}_s${set}_w`).value = w;
+        document.getElementById(`${exId}_s${set}_r`).value = r;
+        autoSave(exId, set);
+        showToast("Werte kopiert!");
+        checkPR(exId, set, w, 'w'); checkPR(exId, set, r, 'r');
     }
 
+    function autoSave(exId, set) {
+        let w = document.getElementById(`${exId}_s${set}_w`).value;
+        let r = document.getElementById(`${exId}_s${set}_r`).value;
+        localStorage.setItem(`wy_curr_${exId}_s${set}`, JSON.stringify({w:w, r:r}));
+    }
+
+    function saveNote(exId, val) { localStorage.setItem(`wy_note_${exId}`, val); }
+
+    function checkPR(exId, set, histVal, type) {
+        let el = document.getElementById(`${exId}_s${set}_${type}`);
+        let currentVal = parseFloat(el.value);
+        if(histVal > 0 && currentVal > histVal) el.classList.add('pr-glow');
+        else el.classList.remove('pr-glow');
+    }
+
+    function checkAllPRs(type) {
+        workoutPlan[type].forEach(ex => { for(let i=1; i<=ex.sets; i++) {
+            let hist = {};
+            try { hist = JSON.parse(localStorage.getItem(`wy_hist_${ex.id}_s${i}`)) || {w:0, r:0}; } catch(e){}
+            checkPR(ex.id, i, hist.w, 'w'); checkPR(ex.id, i, hist.r, 'r');
+        }});
+    }
+
+    // --- KALENDER / LOGBOOK LOGIK ---
+    
+    function showCalendar() {
+        switchView('calendar-view');
+        document.getElementById('header-title').innerText = "VERLAUF";
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        const container = document.getElementById('calendar-list');
+        container.innerHTML = '';
+        
+        let logs = [];
+        try { logs = JSON.parse(localStorage.getItem('wy_workout_logs')) || []; } catch(e) {}
+        
+        if(logs.length === 0) {
+            container.innerHTML = '<div class="no-logs">Noch keine Trainings gespeichert.<br>Geh trainieren! 💪</div>';
+            return;
+        }
+
+        // Sortieren: Neueste zuerst
+        logs.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        logs.forEach((log, index) => {
+            const dateObj = new Date(log.date);
+            const dateStr = dateObj.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit' });
+            
+            let detailsHtml = '';
+            log.exercises.forEach(ex => {
+                let setInfo = ex.sets.map(s => `S${s.s}: <b>${s.w}kg</b>×${s.r}`).join(' | ');
+                detailsHtml += `<div class="log-ex-row"><div class="log-ex-name">${ex.name}</div><div class="log-set-info">${setInfo}</div></div>`;
+            });
+
+            container.innerHTML += `
+                <div class="log-entry">
+                    <div class="log-header" onclick="toggleLog(${index})">
+                        <span class="log-date">${dateStr}</span>
+                        <span class="log-type">${log.type}</span>
+                    </div>
+                    <div class="log-content" id="log-${index}">
+                        ${detailsHtml}
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function toggleLog(id) {
+        const el = document.getElementById(`log-${id}`);
+        if(el.style.display === "block") el.style.display = "none"; else el.style.display = "block";
+    }
+
+    // --- FINISH & SAVE (Jetzt mit LOGBUCH) ---
     function finishWorkout(type) {
-        // Visuelles Feedback sofort geben
         let btn = document.getElementById("finishBtn");
         if(btn) btn.innerText = "SPEICHERE...";
 
         setTimeout(() => {
             try {
-                // Keine Confirm-Box mehr -> Speichert sofort
+                // 1. Daten für Logbuch sammeln
+                let sessionLog = {
+                    date: new Date().toISOString(),
+                    type: type.toUpperCase(),
+                    exercises: []
+                };
+
+                // 2. Loop durch Übungen: Speichern von History UND Sammeln für Log
                 workoutPlan[type].forEach(ex => {
+                    let exData = { name: ex.name, sets: [] };
+                    let hasData = false;
+
                     for(let i=1; i <= ex.sets; i++) {
-                        let wEl = document.getElementById(`${ex.id}_s${i}_w`);
-                        let rEl = document.getElementById(`${ex.id}_s${i}_r`);
+                        let w = document.getElementById(`${ex.id}_s${i}_w`).value;
+                        let r = document.getElementById(`${ex.id}_s${i}_r`).value;
                         
-                        if(wEl && rEl) {
-                            let w = wEl.value;
-                            let r = rEl.value;
-                            // Speichern in History nur wenn Werte da sind
-                            if(w && r) {
-                                localStorage.setItem(`wy_moers_hist_${ex.id}_s${i}`, JSON.stringify({weight:w, reps:r}));
-                            }
-                            // Löschen der temporären Werte für nächsten Tag
-                            localStorage.removeItem(`wy_moers_curr_${ex.id}_s${i}`);
+                        if(w && r) {
+                            // History für "Letztes Mal" updaten
+                            localStorage.setItem(`wy_hist_${ex.id}_s${i}`, JSON.stringify({w:w, r:r}));
+                            // Daten für Logbuch
+                            exData.sets.push({ s: i, w: w, r: r });
+                            hasData = true;
                         }
+                        // Temp Daten löschen
+                        localStorage.removeItem(`wy_curr_${ex.id}_s${i}`);
                     }
+                    if(hasData) sessionLog.exercises.push(exData);
                 });
 
-                // Toast anzeigen
-                var toast = document.getElementById("toast");
-                toast.className = "show";
-                setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
-                
-                // Zurück zum Start
-                setTimeout(goHome, 1000);
-            } catch (e) {
-                alert("FEHLER beim Speichern: " + e.message);
-                if(btn) btn.innerText = "FEHLER - NOCHMAL VERSUCHEN";
+                // 3. Logbuch Eintrag speichern (wenn trainiert wurde)
+                if(sessionLog.exercises.length > 0) {
+                    let logs = JSON.parse(localStorage.getItem('wy_workout_logs')) || [];
+                    logs.push(sessionLog);
+                    localStorage.setItem('wy_workout_logs', JSON.stringify(logs));
+                }
+
+                showToast("Training gespeichert & archiviert!");
+                setTimeout(goHome, 1500);
+
+            } catch(e) {
+                alert("Fehler: " + e.message);
+                if(btn) btn.innerText = "FEHLER";
             }
-        }, 100); // Kurze Verzögerung damit der Button-Text sich ändern kann
+        }, 50);
     }
 
     function clearInputs(type) {
-        if(!confirm("Eingaben löschen?")) return;
-        workoutPlan[type].forEach(ex => {
-            for(let i=1; i <= ex.sets; i++) {
-                let w = document.getElementById(`${ex.id}_s${i}_w`);
-                let r = document.getElementById(`${ex.id}_s${i}_r`);
-                if(w) w.value = '';
-                if(r) r.value = '';
-                localStorage.removeItem(`wy_moers_curr_${ex.id}_s${i}`);
-            }
-        });
+        if(!confirm("Eingaben zurücksetzen?")) return;
+        workoutPlan[type].forEach(ex => { for(let i=1; i <= ex.sets; i++) {
+            document.getElementById(`${ex.id}_s${i}_w`).value = '';
+            document.getElementById(`${ex.id}_s${i}_r`).value = '';
+            localStorage.removeItem(`wy_curr_${ex.id}_s${i}`);
+            checkPR(ex.id, i, 0, 'w'); checkPR(ex.id, i, 0, 'r');
+        }});
     }
+
+    // Timer Logic
+    let timerInterval; let seconds = 0; let isRunning = false;
+    function startTimerIfNew(val) { if(val && !isRunning) { seconds = 0; updateTimerDisplay(); toggleTimer(); } }
+    function toggleTimer() {
+        if(isRunning) { clearInterval(timerInterval); document.getElementById('timer-btn').innerText = "Start"; document.getElementById('timer-val').classList.remove('timer-active'); isRunning = false; }
+        else { clearInterval(timerInterval); timerInterval = setInterval(() => { seconds++; updateTimerDisplay(); }, 1000); document.getElementById('timer-btn').innerText = "Stop"; document.getElementById('timer-val').classList.add('timer-active'); isRunning = true; }
+    }
+    function addTime(secs) { seconds += secs; updateTimerDisplay(); }
+    function resetTimer() { clearInterval(timerInterval); seconds = 0; isRunning = false; updateTimerDisplay(); document.getElementById('timer-btn').innerText = "Start"; document.getElementById('timer-val').classList.remove('timer-active'); }
+    function updateTimerDisplay() { let m = Math.floor(seconds / 60).toString().padStart(2, '0'); let s = (seconds % 60).toString().padStart(2, '0'); document.getElementById('timer-val').innerText = `${m}:${s}`; }
+
+    // Misc
+    function toggleModal() { const m = document.getElementById('modal-overlay'); m.style.display = (m.style.display === 'flex') ? 'none' : 'flex'; }
+    function downloadBackup() { const data = JSON.stringify(localStorage); const blob = new Blob([data], {type: "application/json"}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = "well_you_backup.json"; document.body.appendChild(a); a.click(); document.body.removeChild(a); toggleModal(); }
+    function importBackup(input) { const file = input.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const data = JSON.parse(e.target.result); Object.keys(data).forEach(k => { localStorage.setItem(k, data[k]); }); alert("Backup geladen!"); location.reload(); } catch(err) { alert("Fehler beim Laden."); } }; reader.readAsText(file); }
+    function showToast(msg) { const t = document.getElementById("toast"); t.innerText = msg; t.className = "show"; setTimeout(() => t.className = t.className.replace("show", ""), 3000); }
 </script>
 </body>
 </html>
